@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38be1b31a43777a4f8758751704386cd, type: 3}
+  m_Name: PayLineFirstRow
+  m_EditorClassIdentifier: 
+  combinationsList:
+  - {fileID: 11400000, guid: bbebbee4330449744bd47a04947e32e8, type: 2}
+  - {fileID: 11400000, guid: 502e59b7b9580a14ea12636da73592fe, type: 2}
+  - {fileID: 11400000, guid: b6210d349d4101646b1975980a07e1f3, type: 2}
+  probability: 40
+  payLineType: 1

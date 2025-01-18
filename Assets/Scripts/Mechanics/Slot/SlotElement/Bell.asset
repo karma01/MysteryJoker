@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c870ef551ef9ac44ab81d1f4379b032, type: 3}
+  m_Name: Bell
+  m_EditorClassIdentifier: 
+  elementData: 2
+  probabilityOfOccurrence: 25
+  prize: 30
+  elementSprite: {fileID: 5299924407541326493, guid: 0aea6e6bb3584a141a3eb3f3121cd2b4, type: 3}
