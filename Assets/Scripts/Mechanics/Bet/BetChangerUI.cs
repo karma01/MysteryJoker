@@ -9,6 +9,7 @@ namespace Mechanics.Bet
 {
     public class BetChangerUI : MonoBehaviour
     {
+        public event Action<BetData> OnBetDataChanged;
         [SerializeField] private List<BetDataContainer> betaDataContainers = new List<BetDataContainer>();
         [SerializeField] private List<BetData> betsData = new List<BetData>();
         [SerializeField] private TMP_Text betText;
@@ -136,6 +137,8 @@ namespace Mechanics.Bet
 
         private void ChangeBet(BetData betData)
         {
+            OnBetDataChanged?.Invoke(betData);
+
             _currentBetData = betData;
             UpdateBetText(betData);
         }

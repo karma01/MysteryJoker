@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6c4ee36571ea8a24f95aff906e209c40, type: 2}
   - {fileID: 11400000, guid: 7b9271336eb16c14485c1a49f05f4b12, type: 2}
   probability: 40
+  payLineType: 1

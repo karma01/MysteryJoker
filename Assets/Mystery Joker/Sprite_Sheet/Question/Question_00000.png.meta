@@ -119,67 +119,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Question_00000_0
-      rect:
-        serializedVersion: 2
-        x: 35
-        y: 46
-        width: 70
-        height: 108
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7279fbfa6a3f3e8c0800000000000000
-      internalID: -3971062549171955929
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Question_00000_1
       rect:
         serializedVersion: 2
-        x: 107
-        y: 33
-        width: 86
-        height: 134
+        x: 0
+        y: 0
+        width: 300
+        height: 200
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a363842d07f0706d0800000000000000
-      internalID: -3024431647517297094
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Question_00000_2
-      rect:
-        serializedVersion: 2
-        x: 195
-        y: 46
-        width: 70
-        height: 108
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 743a520b745d51970800000000000000
-      internalID: 8725114356974854983
+      spriteID: 8b05bc07f054fe549bbd84fd946f40a4
+      internalID: -2017073565
       vertices: []
       indices: 
       edges: []
@@ -188,7 +144,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 91427448351ae66449b3bce39467bb54
     internalID: 0
     vertices: []
     indices: 
@@ -197,7 +153,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Question_00000_0: 275440976
+      Question_00000_1: -2017073565
+      Question_00000_2: 130272010
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

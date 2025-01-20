@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,9 @@ namespace Mechanics.Slot
         [SerializeField] private SlotElement slotElement;
 
         [SerializeField] private Image elementIdentifierImage;
+
+        [SerializeField] private Animator mysteryBoxAnimator;
+        private static readonly int IsPlaying = Animator.StringToHash("isPlaying");
 
         private void Start()
         {
@@ -36,6 +40,24 @@ namespace Mechanics.Slot
         private void SetElementIdentifierImage(Sprite image)
         {
             elementIdentifierImage.sprite = image;
+        }
+
+        public void RunMysteryBoxAnimation()
+        {
+            mysteryBoxAnimator.gameObject.SetActive(true);
+            mysteryBoxAnimator.SetBool(IsPlaying, true);
+
+            DOVirtual.DelayedCall(3, () =>
+            {
+                DisableMysteryBoxAnimation();
+            });
+        }
+
+        private void DisableMysteryBoxAnimation()
+        {
+            mysteryBoxAnimator.SetBool(IsPlaying, false);
+
+            mysteryBoxAnimator.gameObject.SetActive(false);
         }
     }
 }

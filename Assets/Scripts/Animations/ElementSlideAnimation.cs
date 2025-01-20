@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
+using UI;
 using UnityEngine;
 
 namespace Animations
@@ -66,6 +67,10 @@ namespace Animations
         public void InitiateMovement()
         {
             if (_movementRoutine != null) return;
+            
+            //Show top text
+            
+            
             _movementRoutine = StartCoroutine(InitiateMovementRoutine());
 
             _isSlotSpinning = true;
@@ -128,8 +133,10 @@ namespace Animations
                 }
 
                 _isSlotSpinning = false;
+                TopVisualUIManager.GetInstance().SetNormalTexts("PRESS SPIN TO BEGIN" );
 
                 OnSlotChangeState?.Invoke(false);
+                //Show text
             });
         }
 

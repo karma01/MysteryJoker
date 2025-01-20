@@ -121,7 +121,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 383
+        width: 544
         height: 82
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -129,32 +129,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4fd953e8efce128d0800000000000000
-      internalID: -2872754509233938956
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Mystery win 1_1
-      rect:
-        serializedVersion: 2
-        x: 383
-        y: 1
-        width: 161
-        height: 80
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4847869057441bec0800000000000000
-      internalID: -3552983361558907772
+      spriteID: 00cd348f366aec8459b21fe7752e2968
+      internalID: -88282691
       vertices: []
       indices: 
       edges: []
@@ -163,7 +141,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 90f6ea63cd1431940a91c6b7a19f9033
     internalID: 0
     vertices: []
     indices: 
@@ -172,7 +150,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Mystery win 1_0: -88282691
+      Mystery win 1_1: -721236621
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

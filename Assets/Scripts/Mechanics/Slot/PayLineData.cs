@@ -9,7 +9,7 @@ namespace Mechanics.Slot
     {
         public enum PayLineType
         {
-            Diagonal, Linear
+            DiagonalLeft, DiagonalRight,TopRow, MidRow, LastRow
         }
         public List<SlotBoxData> combinationsList;
         public float probability;

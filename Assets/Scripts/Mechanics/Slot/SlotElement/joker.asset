@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: joker
   m_EditorClassIdentifier: 
   elementData: 3
-  probabilityOfOccurrence: 5
-  prize: 50
+  probabilityOfOccurrence: 40
+  prize: 10
   elementSprite: {fileID: 1058205039988225401, guid: a33c316f5543de0438e27a8f7e59a3b9, type: 3}

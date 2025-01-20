@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mechanics.Slot;
@@ -7,8 +8,21 @@ using Random = UnityEngine.Random;
 
 namespace Mechanics.Rules
 {
-    public class SlotRule : MonoBehaviour
+    [System.Serializable]
+    public class PaylineWinInfo
     {
+        public PayLineData payLine;
+        public List<SlotBox> slotBoxes = new List<SlotBox>();
+        public SlotElement assignedSlotElement;
+    }
+
+    public class PayLineFormation : MonoBehaviour
+    {
+        public event Action<List<PaylineWinInfo>> OnLinesWon;
+
+        public event Action<PaylineWinInfo> OnGetTwoJokersOnMysteryWin;
+        public event Action<PaylineWinInfo> OnMysteryJokerOccur;
+
         [Header("Normal PayLines")]
         [Tooltip(
             "Notice:  dont set the combination list to joker payLines, if you do then they can also occur on that specified payLine")]
@@ -21,42 +35,57 @@ namespace Mechanics.Rules
 
         [SerializeField] private WinData winData;
 
-        private float _totalProbabilityPayLine;
-        private float _totalProbabilityOfOccuranceElements;
+        private List<PaylineWinInfo> _winningPaylines = new List<PaylineWinInfo>();
+        readonly PaylineWinInfo _mysteryJokerLine = new PaylineWinInfo();
 
+        private PaylineWinInfo _twoMysteryJokersSlotInfo = new PaylineWinInfo();
 
-        private List<PayLineData> _choosenPayLineData = new List<PayLineData>();
+        private bool _isMysterySpin;
 
-        private void Start()
+        public void FindPayLineToGive(bool isMysterySpin)
         {
-            foreach (var lineData in payLineData)
-            {
-                _totalProbabilityPayLine += lineData.probability;
-            }
+            _isMysterySpin = isMysterySpin;
 
-            foreach (var slotElement in slotElements)
-            {
-                _totalProbabilityOfOccuranceElements += slotElement.probabilityOfOccurrence;
-            }
-        }
+            _mysteryJokerLine.slotBoxes.Clear();
 
-        [Button]
-        public void FindPayLineToGive()
-        {
+            _winningPaylines.Clear();
+            _twoMysteryJokersSlotInfo.slotBoxes.Clear();
+            
             int count = CalculateWinsToSelect();
 
             if (count == 0)
             {
                 Debug.Log("No Win");
-                ShuffleSlotElementsWithoutWins(); 
+                ShuffleSlotElementsWithoutWins();
             }
             else
             {
                 ShuffleSlotElementsWithoutWins();
                 Debug.Log("Win");
-                SelectSlotElement(count); 
+                SelectSlotElement(count);
             }
+
+            // AddAdditionalWinningPaylines();
+            if (_winningPaylines.Count > 0)
+            {
+                OnLinesWon?.Invoke(_winningPaylines);
+            }
+
+
+            if (_mysteryJokerLine.slotBoxes.Count > 0)
+            {
+                OnMysteryJokerOccur?.Invoke(_mysteryJokerLine);
+            }
+            
+            if (_isMysterySpin && HasExactlyTwoMysteryJokers())
+            {
+                OnGetTwoJokersOnMysteryWin?.Invoke(_twoMysteryJokersSlotInfo);
+                // Give mystery reward
+            }
+
+            //LogWinningPaylines();
         }
+
 
         #region NotWin
 
@@ -256,7 +285,7 @@ namespace Mechanics.Rules
                     }
                 }
 
-                if (lowValueElement != null)
+                if (lowValueElement )
                 {
                     _chosenSlotElements.Add(lowValueElement);
                 }
@@ -274,14 +303,12 @@ namespace Mechanics.Rules
             List<float> cumulativeProbabilities = new List<float>();
             float cumulativeSum = 0;
 
-            // Calculate cumulative probabilities for the paylines.
             foreach (var lineData in payLineData)
             {
                 cumulativeSum += lineData.probability;
                 cumulativeProbabilities.Add(cumulativeSum);
             }
 
-            // Select only 'count' number of paylines.
             while (_chosenPayLines.Count < count)
             {
                 float randomValue = Random.Range(0, cumulativeSum);
@@ -327,20 +354,22 @@ namespace Mechanics.Rules
                 Debug.Log("Give free spins here and also if there are two jokers give mystery win ");
                 HandleMysteryJoker(chosenPayLines, chosenSlotElements, mysteryJoker);
             }
+
+          
         }
+
 
         private void GenerateOtherPayLines(List<PayLineData> chosenPayLines, List<SlotElement> chosenSlotElements)
         {
             List<SlotElement> chosenElements = new List<SlotElement>();
-            HashSet<SlotBox> filledSlotBoxes = new HashSet<SlotBox>(); // Track filled slot boxes
-
-            Debug.Log("Chosen payLines are: " + chosenPayLines.Count);
+            HashSet<SlotBox> filledSlotBoxes = new HashSet<SlotBox>();
 
             foreach (var lineData in chosenPayLines)
             {
                 SlotElement assignedElement = null;
 
-                if (lineData.payLineType == PayLineData.PayLineType.Diagonal)
+                if (lineData.payLineType is PayLineData.PayLineType.DiagonalLeft
+                    or PayLineData.PayLineType.DiagonalRight)
                 {
                     if (chosenElements.Count > 0)
                     {
@@ -352,27 +381,28 @@ namespace Mechanics.Rules
                         chosenElements.Add(assignedElement);
                     }
                 }
-                else // Handle non-diagonal payline
+                else
                 {
                     bool elementAssigned = false;
                     int attemptCount = 0;
 
-                    while (!elementAssigned && attemptCount < 10) // Limit attempts to avoid infinite loop
+                    while (!elementAssigned && attemptCount < Int32.MaxValue)
                     {
                         assignedElement = chosenSlotElements[Random.Range(0, chosenSlotElements.Count)];
-
-                        // Check if placing this element would form a winning payline in any other payline
                         bool willFormWin = false;
+
                         foreach (var otherLineData in payLineData)
                         {
-                            if (otherLineData != lineData && IsWinningPayline(otherLineData))
+                            if (otherLineData != lineData)
                             {
-                                willFormWin = true;
-                                break;
+                                if (WillAssignmentCauseWin(otherLineData, assignedElement, filledSlotBoxes))
+                                {
+                                    willFormWin = true;
+                                    break;
+                                }
                             }
                         }
 
-                        // Only assign the element if it won't form an unintended win
                         if (!willFormWin && !chosenElements.Contains(assignedElement))
                         {
                             chosenElements.Add(assignedElement);
@@ -381,9 +411,20 @@ namespace Mechanics.Rules
 
                         attemptCount++;
                     }
+
+                    if (!elementAssigned)
+                    {
+                        throw new Exception("Failed to assign a valid element without causing unintended wins.");
+                    }
                 }
 
-                // Now assign the element to the slot boxes in the payline
+                var paylineInfo = new PaylineWinInfo
+                {
+                    payLine = lineData,
+                    assignedSlotElement = assignedElement,
+                    slotBoxes = new List<SlotBox>()
+                };
+
                 foreach (var combination in lineData.combinationsList)
                 {
                     SlotBox slotBox = GetSlotBoxAtPosition(combination.slotSlotBoxIdentifier.index,
@@ -392,10 +433,54 @@ namespace Mechanics.Rules
                     if (slotBox != null && !filledSlotBoxes.Contains(slotBox))
                     {
                         slotBox.SetSlotElement(assignedElement);
-                        filledSlotBoxes.Add(slotBox); // Mark this slot as filled
+                        filledSlotBoxes.Add(slotBox);
+                        paylineInfo.slotBoxes.Add(slotBox);
+                    }
+                }
+
+                _winningPaylines.Add(paylineInfo);
+            }
+        }
+
+        /// <summary>
+        /// Simulates the assignment of an element and checks if it will cause a win in the given payline.
+        /// </summary>
+        /// <param name="payLine">The payline to validate.</param>
+        /// <param name="element">The slot element to simulate assigning.</param>
+        /// <param name="filledSlotBoxes">The currently filled slot boxes.</param>
+        /// <returns>True if the assignment causes a win; otherwise, false.</returns>
+        private bool WillAssignmentCauseWin(PayLineData payLine, SlotElement element, HashSet<SlotBox> filledSlotBoxes)
+        {
+            int matchingElementCount = 0;
+
+            foreach (var combination in payLine.combinationsList)
+            {
+                SlotBox slotBox = GetSlotBoxAtPosition(combination.slotSlotBoxIdentifier.index,
+                    combination.slotSlotBoxIdentifier.row);
+
+                if (slotBox == null)
+                {
+                    return false; // If any slot box is null, it can't form a win.
+                }
+
+                if (filledSlotBoxes.Contains(slotBox))
+                {
+                    if (slotBox.GetSlotElement() == element)
+                    {
+                        matchingElementCount++;
+                    }
+                }
+                else
+                {
+                    // Simulate the assignment
+                    if (element == slotBox.GetSlotElement())
+                    {
+                        matchingElementCount++;
                     }
                 }
             }
+
+            return matchingElementCount >= 3; // Adjust the threshold based on your win conditions
         }
 
 
@@ -439,10 +524,40 @@ namespace Mechanics.Rules
                 SlotBox slotBox = slotBoxes[index];
 
                 slotBox.SetSlotElement(mysteryJoker);
+
+                _mysteryJokerLine.slotBoxes.Add(slotBox);
             }
 
-            //give free 10 spins and also when there are two mystery jokers give mystery win
+
         }
+
+        private bool HasExactlyTwoMysteryJokers()
+        {
+            int mysteryJokerCount = 0;
+            _twoMysteryJokersSlotInfo.slotBoxes.Clear();
+
+            foreach (var slotBox in slotBoxes)
+            {
+                var slotElement = slotBox.GetSlotElement();
+                if (slotElement != null && slotElement.elementData == BasicElementData.Mystery)
+                {
+                    mysteryJokerCount++;
+                    if (mysteryJokerCount <= 2)
+                    {
+                        _twoMysteryJokersSlotInfo.slotBoxes.Add(slotBox);
+                    }
+                }
+            }
+
+            if (mysteryJokerCount == 2)
+            {
+                return true;
+            }
+
+            _twoMysteryJokersSlotInfo.slotBoxes.Clear();
+            return false;
+        }
+
 
 
         private int CalculateWinsToSelect()
@@ -463,5 +578,18 @@ namespace Mechanics.Rules
         }
 
         #endregion
+
+        //test
+        private void LogWinningPaylines()
+        {
+            foreach (var winInfo in _winningPaylines)
+            {
+                Debug.Log($"Payline: {winInfo.payLine.name}, Assigned Element: {winInfo.assignedSlotElement.name}");
+                foreach (var slotBox in winInfo.slotBoxes)
+                {
+                    Debug.Log($"SlotBox: {slotBox.name}, Element: {slotBox.GetSlotElement().name}");
+                }
+            }
+        }
     }
 }
