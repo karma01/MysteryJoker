@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Win Data
   m_EditorClassIdentifier: 
   maxWinsInRound: 1
-  probabilityForOneWin: 20
+  probabilityForOneWin: 100
