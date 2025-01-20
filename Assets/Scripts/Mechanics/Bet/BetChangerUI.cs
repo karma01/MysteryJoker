@@ -145,7 +145,7 @@ namespace Mechanics.Bet
 
         private void UpdateBetText(BetData betData)
         {
-            betText.text = betData.betAmount.ToString(CultureInfo.InvariantCulture);
+            betText.text = betData.betAmount.ToString("F2");
         }
     }
 }

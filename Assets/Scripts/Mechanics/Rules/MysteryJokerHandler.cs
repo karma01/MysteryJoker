@@ -3,6 +3,7 @@ using Animations;
 using DG.Tweening;
 using UI;
 using UnityEngine;
+using Utils;
 
 namespace Mechanics.Rules
 {
@@ -17,6 +18,7 @@ namespace Mechanics.Rules
 
         [SerializeField] private WinLinesDisplayWin winLinesDisplayWin;
 
+        [SerializeField] private ToggleButtonInteraction toggleButtonInteraction;
         private int _currentSpinCount;
         private int _currentSpinCountAscend;
         private int _totalSpinCount;
@@ -49,11 +51,22 @@ namespace Mechanics.Rules
 
         private void ElementSlideAnimationOnOnSlotChangeState(bool obj)
         {
+            if (!obj)
+            {
+                DOVirtual.DelayedCall(0.5f, () =>
+                {
+                    toggleButtonInteraction.ToggleButtonInteractions(true);
+
+                });
+
+            }
             _canMysterySpin = _currentSpinCount > 0;
-            if (!_canMysterySpin)
+            if (!_canMysterySpin && !obj)
             {
                 _currentSpinCountAscend = 0;
                 mysteryJokerUI.ChangeToNormalTheme();
+                
+                toggleButtonInteraction.ToggleButtonInteractions(true);
             }
 
             if (_animationRoutine != null)
@@ -125,6 +138,7 @@ namespace Mechanics.Rules
 
         private void OnMysteryJokerOccur(PaylineWinInfo paylineWinInfos)
         {
+            toggleButtonInteraction.ToggleButtonInteractions(false);
             // _canMysterySpin = false;
 
             _hasJokerOccured = true;
@@ -147,7 +161,7 @@ namespace Mechanics.Rules
 
             _currentSpinCount--;
             _currentSpinCountAscend++;
-            
+
             if (_canMysterySpin)
             {
                 TopVisualUIManager.GetInstance()
@@ -164,6 +178,7 @@ namespace Mechanics.Rules
                 _totalSpinCount = 0;
                 _currentSpinCountAscend = 0;
 
+                toggleButtonInteraction.ToggleButtonInteractions(true);
                 TopVisualUIManager.GetInstance().SetNormalTexts("GOOD LUCK");
             }
         }

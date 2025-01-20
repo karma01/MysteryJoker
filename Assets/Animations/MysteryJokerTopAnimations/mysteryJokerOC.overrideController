@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: mysteryJokerOC
+  m_Controller: {fileID: 9100000, guid: a1608276a3faa0f44a1edb08abaa8d33, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 0e1666fa088927e4eb4d5b70a288cb8f, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 0e1666fa088927e4eb4d5b70a288cb8f, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 2984210ea55c8324e8af339a8920615d, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2984210ea55c8324e8af339a8920615d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 6111cea22fabe3d428834d083f420956, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6111cea22fabe3d428834d083f420956, type: 2}

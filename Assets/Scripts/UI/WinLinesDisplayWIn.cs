@@ -90,22 +90,23 @@ namespace UI
         {
             _isAnimating = false;
 
-            if (_animationRoutine != null)
-            {
-                StopCoroutine(_animationRoutine);
-                _animationRoutine = null;
-            }
-
             if (_animatingDataList.Count > 0)
             {
                 foreach (var animationData in _animatingDataList)
                 {
                     animationData.topRowAnimator.SetBool(IsPlaying, false);
-                }
 
+                }
                 _animatingDataList.Clear();
             }
+
+            if (_animationRoutine != null)
+            {
+                StopCoroutine(_animationRoutine);
+                _animationRoutine = null;
+            }
         }
+
 
         private IEnumerator AnimateSequentially(List<WinLineAnimationData> animatingDataList)
         {
@@ -113,7 +114,7 @@ namespace UI
             {
                 foreach (var data in animatingDataList)
                 {
-                    if (!_isAnimating) break;
+                    if (!_isAnimating) yield break; 
 
                     data.topRowAnimator.SetBool(IsPlaying, true);
                     UpdateRowUI(data, data.amount);
@@ -122,29 +123,13 @@ namespace UI
 
                     data.topRowAnimator.SetBool(IsPlaying, false);
                 }
+                if (!_isAnimating) yield break; 
 
-                if (!_isAnimating) break;
-
-                foreach (var data in animatingDataList)
-                {
-                    data.topRowAnimator.SetBool(IsPlaying, true);
-                    UpdateRowUI(data, data.amount);
-                }
-
-                yield return new WaitForSeconds(0.5f);
-
-                foreach (var data in animatingDataList)
-                {
-                    data.topRowAnimator.SetBool(IsPlaying, false);
-                }
-
-                if (_isAnimating)
-                {
-                   // _isAnimating = false; 
-                    OnAllAnimationsCompleted?.Invoke();
-                }
             }
+
+            OnAllAnimationsCompleted?.Invoke();
         }
+
 
 
 

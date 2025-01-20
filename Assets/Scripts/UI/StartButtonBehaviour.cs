@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -22,6 +23,10 @@ namespace UI
         [FormerlySerializedAs("slotRule")] [SerializeField]
         private PayLineFormation payLineFormation;
 
+        [SerializeField] private WinLinesDisplayWin displayWin;
+
+        [SerializeField] private ToggleButtonInteraction toggleButtonInteraction;
+
 
         private void Start()
         {
@@ -31,10 +36,13 @@ namespace UI
 
                 if (!mysteryJokerHandler.canMysterySpin && AmountHandler.GetInstance().IsAmountGreaterForSpin())
                 {
+                    toggleButtonInteraction.ToggleButtonInteractions(false);
                     ToggleSpinAnimation();
-                    AmountHandler.GetInstance().OnGameInitiateAndNotFreeSpin();
-                    TopVisualUIManager.GetInstance().SetNormalTexts("GOOD LUCK !!" );
 
+                    AmountHandler.GetInstance().OnGameInitiateAndNotFreeSpin();
+                    TopVisualUIManager.GetInstance().SetNormalTexts("GOOD LUCK !!");
+
+                    displayWin.StopSequentialAnimation();
                 }
             });
 
@@ -52,7 +60,7 @@ namespace UI
 
             if (isSlotSpinning)
             {
-         
+                DOVirtual.DelayedCall(0.5f, () => { elementSlideAnimation.StopMovement(); });
             }
             else
             {

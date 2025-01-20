@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   elementData: 1
   probabilityOfOccurrence: 55
-  prize: 15
+  prize: 2
   elementSprite: {fileID: -5389705431057896473, guid: 3237efad1e07c5c4c90f587590cb8807, type: 3}
